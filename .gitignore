@@ -1,0 +1,7 @@
+.terraform
+*.yaml
+*.tfstate
+*.tfstate.backup
+*.lock.hcl
+functions/*.zip
+__pycache__
