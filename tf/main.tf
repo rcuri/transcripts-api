@@ -5,7 +5,7 @@ provider "aws" {
 variable "lambda_root" {
   type        = string
   description = "The relative path to the source of the lambda"
-  default = "${path.module}/../functions"
+  default     = "../functions"
 }
 
 data "aws_caller_identity" "current" {}
