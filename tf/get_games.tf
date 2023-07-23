@@ -1,11 +1,11 @@
 resource "null_resource" "install_dependencies_get_games" {
   provisioner "local-exec" {
-    command = "pip install -r ${path.module}/../functions/get_games/requirements.txt -t ${path.module}/../functions/get_games"
+    command = "pip install -r ${var.lambda_root}/get_games/requirements.txt -t ${var.lambda_root}/get_games"
   }
   triggers  =  {
-    dependencies_versions = filemd5("${path.module}/../functions/get_games/requirements.txt")
-    handler_versions = filemd5("${path.module}/../functions/get_games/handler.py")    
-    index_versions = filemd5("${path.module}/../functions/get_games/index.py")    
+    dependencies_versions = filemd5("${var.lambda_root}/get_games/requirements.txt")
+    handler_versions = filemd5("${var.lambda_root}/get_games/handler.py")    
+    index_versions = filemd5("${var.lambda_root}/get_games/index.py")    
   }
 }
 
@@ -16,8 +16,8 @@ data "archive_file" "lambda_get_games" {
     "__pycache__",
     "venv",
   ]
-  source_dir  = "${path.module}/../functions/get_games"
-  output_path = "${path.module}/../functions/get_games.zip"
+  source_dir  = "${var.lambda_root}/get_games"
+  output_path = "${var.lambda_root}/get_games.zip"
 }
 
 resource "aws_s3_object" "lambda_get_games" {
