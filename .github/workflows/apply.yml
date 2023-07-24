@@ -17,6 +17,7 @@ jobs:
         env:
           GITHUB_REF: ${{ inputs.github_ref }}
         run: |
+          echo $GITHUB_REF
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
