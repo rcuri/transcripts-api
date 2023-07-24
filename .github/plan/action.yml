@@ -9,20 +9,29 @@ inputs:
   pr_id:
     description: 'Pull request ID'
     required: true  
+  aws-access-key-id: 
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  cli-config-credentials-token:
+    description: 'API Key for Terraform'
+    required: true
 runs:
   using: "composite"
   steps:
     - name: Configure AWS Credentials Action For GitHub Actions
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: us-east-1
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        cli_config_credentials_token: ${{ inputs.cli-config-credentials-token }}
     
     - name: Interact with Terraform
       shell: bash
