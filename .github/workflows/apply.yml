@@ -27,5 +27,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cli-config-credentials-token: ${{ secrets.TF_API_TOKEN }}
           terraform_directory: "tf"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.ACTIONS_SECRET }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
