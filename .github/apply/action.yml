@@ -1,0 +1,60 @@
+name: "Terraform setup and apply"
+description: "Applys a terraform plan file from an artifact"
+inputs:
+  terraform_directory: 
+    description: 'where to execute terraform'
+    required: true
+  github_token: 
+    description: 'github secret'
+    required: true
+  pr_id:
+    description: 'Pull request ID'
+    required: true
+  aws-access-key-id: 
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  cli-config-credentials-token:
+    description: 'API Key for Terraform'
+    required: true    
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS Credentials Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: us-east-1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ inputs.cli-config-credentials-token }}
+    
+    - name: Terraform Init
+      id: init
+      shell: bash
+      run: terraform -chdir=./tf init
+
+    - name: Download Plan
+      id: download-plan
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{ inputs.github_token }}
+        workflow: plan.yaml
+        pr: ${{ inputs.pr_id }}
+        name: ${{ inputs.pr_id }}-tf-plan
+        path: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Apply
+      id: apply
+      working-directory: ${{ inputs.terraform_directory }}
+      shell: bash
+      run: |
+        echo 'apply<<EOF' >> $GITHUB_OUTPUT
+        terraform apply -input=false -no-color tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
