@@ -15,7 +15,6 @@ jobs:
     if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v3
-
       - name: Get PR ID
         id: pr-id
         shell: bash
