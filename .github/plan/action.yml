@@ -1,0 +1,61 @@
+name: Terraform setup and plan
+inputs:
+  terraform_directory:
+    description: 'Directory that holds Terraform code'
+    required: true
+  github_token: 
+    description: 'GitHub token for auth'
+    required: true
+  pr_id:
+    description: 'Pull request ID'
+    required: true  
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS Credentials Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    
+    - name: Interact with Terraform
+      run: terraform --version
+
+    - name: Terraform Init
+      id: init
+      run: terraform -chdir=./tf init
+    
+    - name: Terraform Plan
+      id: plan
+      run: |
+        echo 'plan<<EOF' >> $GITHUB_OUTPUT
+        terraform -chdir=./tf plan -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    - name: Save Artifact
+      id: save-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.pr_id }}-tf-plan
+        path: ${{ inputs.terraform_directory }}/tfplan
+
+    - name: Comment Plan
+      id: comment-plan
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        token: ${{ inputs.github_token }}
+        issue-number: ${{ inputs.pr_id }}
+        body: |
+          Terraform Plan:
+
+          ```
+          ${{ steps.plan.outputs.plan }}
+          ```
+
+          Plan saved to GH artifacts.
