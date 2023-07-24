@@ -1,0 +1,59 @@
+name: Terraform setup and plan
+inputs:
+  terraform_directory:
+    description: 'Directory that holds Terraform code'
+    required: true
+  github_token: 
+    description: 'GitHub token for auth'
+    required: true
+  pr_id:
+    description: 'Pull request ID'
+    required: true  
+  aws-access-key-id: 
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  cli-config-credentials-token:
+    description: 'API Key for Terraform'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS Credentials Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: us-east-1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ inputs.cli-config-credentials-token }}
+    
+    - name: Interact with Terraform
+      shell: bash
+      run: terraform --version
+
+    - name: Terraform Init
+      id: init
+      shell: bash
+      run: terraform -chdir=./tf init
+    
+    - name: Terraform Plan
+      id: plan
+      shell: bash
+      run: |
+        echo 'plan<<EOF' >> $GITHUB_OUTPUT
+        terraform -chdir=./tf plan -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    - name: Save Artifact
+      id: save-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.pr_id }}-tf-plan
+        path: ${{ inputs.terraform_directory }}/tfplan
+
