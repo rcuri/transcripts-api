@@ -59,7 +59,7 @@ runs:
 
     - name: Comment Plan
       id: comment-plan
-      uses: peter-evans/create-or-update-comment@v2
+      uses: peter-evans/create-or-update-comment@v3
       with:
         token: ${{ inputs.github_token }}
         issue-number: ${{ inputs.pr_id }}
