@@ -45,7 +45,7 @@ runs:
       uses: dawidd6/action-download-artifact@v2
       with:
         github_token: ${{ inputs.github_token }}
-        workflow: 'Terraform Plan'
+        workflow: plan.yml
         pr: ${{ inputs.pr_id }}
         name: ${{ inputs.pr_id }}-tf-plan
         path: tf/tfplan
