@@ -53,6 +53,7 @@ runs:
 
     - name: Import existing resources
       id: import-resources
+      working-directory: ./tf
       shell: bash
       run: |
         terraform import aws_lambda_function.get_transcript_status_lambda_function transcriptai-dev-get_transcript_status
