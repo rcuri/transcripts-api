@@ -42,6 +42,14 @@ runs:
       shell: bash
       run: terraform -chdir=./tf init
     
+    - name: Terraform Plan
+      id: plan
+      shell: bash
+      run: |
+        echo 'plan<<EOF' >> $GITHUB_OUTPUT
+        terraform -chdir=./tf plan -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+        
     - name: Import existing resources
       id: import-resources
       working-directory: ./tf
@@ -78,14 +86,6 @@ runs:
         terraform import aws_cloudwatch_log_group.process_sqs_queue '/aws/lambda/transcriptai-dev-process_sqs_queue'
 
         terraform import aws_lambda_event_source_mapping.event_source_mapping a949199e-31a0-458c-96e4-7145f5b8db30       
-
-    - name: Terraform Plan
-      id: plan
-      shell: bash
-      run: |
-        echo 'plan<<EOF' >> $GITHUB_OUTPUT
-        terraform -chdir=./tf plan -no-color -out=tfplan >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
 
     - name: Save Artifact
       id: save-artifact
