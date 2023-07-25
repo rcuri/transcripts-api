@@ -42,6 +42,43 @@ runs:
       shell: bash
       run: terraform -chdir=./tf init
     
+    - name: Import existing resources
+      id: import-resources
+      working-directory: ./tf
+      shell: bash
+      run: |
+        terraform import aws_lambda_function.get_transcript_status_lambda_function transcriptai-dev-get_transcript_status
+
+        terraform import aws_lambda_function.generate_transcript_lambda_function transcriptai-dev-generate_transcript
+
+        terraform import aws_lambda_function.get_games_lambda_function transcriptai-dev-getGames
+
+        terraform import aws_lambda_function.get_play_by_play_lambda_function transcriptai-dev-get_play_by_play
+
+        terraform import aws_lambda_function.submit_transcript_request_lambda_function transcriptai-dev-submit_transcript_request
+
+        terraform import aws_lambda_function.update_generate_transcript_status_lambda_function transcriptai-dev-update_generate_transcript_status
+
+        terraform import aws_lambda_function.process_sqs_queue_lambda_function transcriptai-dev-process_sqs_queue
+
+        terraform import aws_cloudwatch_log_group.main_api_gw '/aws/api-gw/dev-transcriptai'
+
+        terraform import aws_cloudwatch_log_group.generate_transcript '/aws/lambda/transcriptai-dev-generate_transcript'
+
+        terraform import aws_cloudwatch_log_group.get_games '/aws/lambda/transcriptai-dev-getGames'
+
+        terraform import aws_cloudwatch_log_group.get_transcript_status '/aws/lambda/transcriptai-dev-get_transcript_status'
+
+        terraform import aws_cloudwatch_log_group.get_play_by_play '/aws/lambda/transcriptai-dev-get_play_by_play'
+
+        terraform import aws_cloudwatch_log_group.submit_transcript_request '/aws/lambda/transcriptai-dev-submit_transcript_request'
+
+        terraform import aws_cloudwatch_log_group.update_generate_transcript_status '/aws/lambda/transcriptai-dev-update_generate_transcript_status'
+
+        terraform import aws_cloudwatch_log_group.process_sqs_queue '/aws/lambda/transcriptai-dev-process_sqs_queue'
+
+        terraform import aws_lambda_event_source_mapping.event_source_mapping a949199e-31a0-458c-96e4-7145f5b8db30       
+
     - name: Terraform Plan
       id: plan
       shell: bash
