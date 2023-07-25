@@ -48,6 +48,7 @@ runs:
         workflow: 'Terraform Plan'
         pr: ${{ inputs.pr_id }}
         name: ${{ inputs.pr_id }}-tf-plan
+        path: tf/tfplan
 
     - name: Terraform Apply
       id: apply
