@@ -56,6 +56,4 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       shell: bash
       run: |
-        echo 'apply<<EOF' >> $GITHUB_OUTPUT
-        terraform apply -input=false -no-color tfplan >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
+        terraform apply -input=false -no-color tfplan >> apply-output.txt
