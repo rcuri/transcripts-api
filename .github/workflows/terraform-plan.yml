@@ -6,7 +6,7 @@ env:
   TF_CLOUD_ORGANIZATION: "rodrigo-curiel-org"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "TranscriptAI"
-  CONFIG_DIRECTORY: "./tf"
+  CONFIG_DIRECTORY: "./"
 jobs:
   terraform:
     if: github.repository != 'hashicorp-education/learn-terraform-github-actions'
