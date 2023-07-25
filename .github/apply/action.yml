@@ -56,4 +56,4 @@ runs:
       shell: bash
       run: |
         ls -aR tf/tfplan
-        terraform -chdir=./tf apply -input=false -no-color tfplan >> apply-output.txt
+        terraform -chdir=./tf apply -input=false -no-color tfplan
