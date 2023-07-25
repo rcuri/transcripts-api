@@ -61,6 +61,9 @@ resource "aws_lambda_function" "get_games_lambda_function" {
 resource "aws_iam_role_policy_attachment" "get_games_lambda_policy" {
   role       = aws_iam_role.get_games_lambda_function_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  depends_on = [
+    aws_iam_role.get_games_lambda_function_role
+  ]
 }
 
 resource "aws_iam_role" "get_games_lambda_function_role" {
