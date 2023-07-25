@@ -49,6 +49,7 @@ runs:
         pr: ${{ inputs.pr_id }}
         name: ${{ inputs.pr_id }}-tf-plan
         path: tf/tfplan
+        search_artifacts: true        
 
     - name: Terraform Apply
       id: apply
