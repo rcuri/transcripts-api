@@ -56,4 +56,5 @@ runs:
       working-directory: ${{ inputs.terraform_directory }}
       shell: bash
       run: |
+        ls -a
         terraform apply -input=false -no-color tfplan >> apply-output.txt
