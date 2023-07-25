@@ -14,8 +14,6 @@ jobs:
       - name: Get PR ID
         id: pr-id
         shell: bash
-        env:
-          GITHUB_REF: ${{ inputs.github_ref }}
         run: |
           echo $GITHUB_REF
           echo $GITHUB_BASE_REF
