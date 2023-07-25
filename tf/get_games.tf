@@ -64,7 +64,7 @@ resource "aws_iam_role_policy_attachment" "get_games_lambda_policy" {
 }
 
 resource "aws_iam_role" "get_games_lambda_function_role" {
-  name_prefix = "get_games_lambda_function_role"
+  name = "get_games_lambda_function_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
