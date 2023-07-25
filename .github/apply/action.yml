@@ -48,6 +48,7 @@ runs:
         workflow: plan.yml
         pr: ${{ inputs.pr_id }}
         name: ${{ inputs.pr_id }}-tf-plan
+        path: tf/
         search_artifacts: true        
 
     - name: Terraform Apply
