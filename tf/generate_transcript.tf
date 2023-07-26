@@ -34,7 +34,7 @@ resource "aws_lambda_function" "generate_transcript_lambda_function" {
   runtime = "python3.8"
   function_name = "transcriptai-dev-generate_transcript"
   memory_size = 512
-  timeout = 6
+  timeout = 120
 
   s3_bucket = aws_s3_bucket.serverless_deployment_bucket.id
   s3_key    = aws_s3_object.lambda_generate_transcript.key
