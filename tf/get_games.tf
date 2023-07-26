@@ -40,7 +40,9 @@ resource "aws_lambda_function" "get_games_lambda_function" {
   s3_key    = aws_s3_object.lambda_get_games.key
 
   source_code_hash = data.archive_file.lambda_get_games.output_base64sha256
-
+  layers = [
+    aws_lambda_layer_version.my-lambda-layer.arn
+  ]
   environment {
     variables = {
       POSTGRES_DEV_PASSWORD = local.db_dev_credentials.password
