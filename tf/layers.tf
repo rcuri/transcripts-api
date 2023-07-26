@@ -21,17 +21,6 @@ resource "null_resource" "lambda_layer" {
   }
 }
 
-data "archive_file" "lambda_layer" {
-  type = "zip"
-  depends_on = [null_resource.lambda_layer]
-  excludes   = [
-    "__pycache__",
-    "venv",
-  ]
-  source_dir  = "${path.root}/python"
-  output_path = "${local.layer_zip_path}"
-}
-
 # define existing bucket for storing lambda layers
 resource "aws_s3_bucket" "lambda_layer_bucket" {
   bucket = "my-lambda-layer-bucket"
