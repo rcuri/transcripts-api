@@ -40,7 +40,11 @@ resource "aws_lambda_function" "generate_transcript_lambda_function" {
   s3_key    = aws_s3_object.lambda_generate_transcript.key
 
   source_code_hash = data.archive_file.lambda_generate_transcript.output_base64sha256
-  layers = [aws_lambda_layer_version.openai_3_8_layer.arn]
+  layers = [
+    aws_lambda_layer_version.openai_3_8_layer.arn,
+    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1"
+  ]
+  
   environment {
     variables = {
       POSTGRES_DEV_PASSWORD = local.db_dev_credentials.password

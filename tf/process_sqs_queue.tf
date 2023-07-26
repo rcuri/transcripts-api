@@ -86,9 +86,12 @@ resource "aws_lambda_function" "process_sqs_queue_lambda_function" {
   s3_key    = aws_s3_object.lambda_process_sqs_queue.key
 
   source_code_hash = data.archive_file.lambda_process_sqs_queue.output_base64sha256
-
+  layers = [
+    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1"
+  ]
   environment {
     variables = {
+      STAGE = "prod"
       POSTGRES_DEV_PASSWORD = local.db_dev_credentials.password
       POSTGRES_DEV_DB = local.db_dev_credentials.db
       POSTGRES_DEV_HOST = local.db_dev_credentials.host
