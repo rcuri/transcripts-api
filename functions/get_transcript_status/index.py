@@ -51,8 +51,8 @@ def get_transcript_status(transcript_id):
         current_record = {
             'transaction_id': result[0],
             'line_number': result[1],
-            'time_spoken': result[2],
-            'speaker_name': result[3],            
+            'speaker_name': result[2],
+            'time_spoken': result[3],            
             'spoken_line': result[4]
         }
         output.append(current_record)
