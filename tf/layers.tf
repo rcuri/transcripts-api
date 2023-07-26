@@ -18,10 +18,20 @@ resource "null_resource" "lambda_layer" {
       sudo apt install zip -y    
       mkdir python
       pip install -r ${local.requirements_path} -t python/
-      zip -r ${local.layer_zip_path} python/
-      ls
+      ls python
     EOT
   }
+}
+
+data "archive_file" "lambda_layer" {
+  type = "zip"
+  depends_on = [null_resource.lambda_layer]
+  excludes   = [
+    "__pycache__",
+    "venv",
+  ]
+  source_dir  = "${path.root}/python"
+  output_path = "${path.root}/../layers/layer.zip"
 }
 
 # define existing bucket for storing lambda layers
@@ -34,7 +44,7 @@ resource "aws_s3_bucket" "lambda_layer_bucket" {
 resource "aws_s3_object" "lambda_layer_zip" {
   bucket     = aws_s3_bucket.lambda_layer_bucket.id
   key        = "lambda_layers/${local.layer_name}/${local.layer_zip_path}"
-  source     = local.layer_zip_path
+  source     = "${path.root}/../layers/layer.zip"
   depends_on = [null_resource.lambda_layer] # triggered only if the zip file is created
 }
 
