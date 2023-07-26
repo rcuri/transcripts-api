@@ -52,6 +52,5 @@ resource "aws_lambda_layer_version" "my-lambda-layer" {
   s3_key              = aws_s3_object.lambda_layer_zip.key
   layer_name          = local.layer_name
   compatible_runtimes = ["python3.8"]
-  skip_destroy        = true
   depends_on          = [aws_s3_object.lambda_layer_zip] # triggered only if the zip file is uploaded to the bucket
 }
