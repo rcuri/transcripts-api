@@ -45,7 +45,7 @@ def get_transcript_status(transcript_id):
             "statusCode": 404
         }
         return response
-    logger.info({"query_results:", results})
+    logger.info({"query_results": results})
     output = []
     for result in results:
         current_record = {

@@ -73,7 +73,7 @@ def generate_transcript(event, _):
         return []
     cursor.close()
     connection.commit()
-    print("results:", results)
+    logger.info({"results": results})
     raw_events = []
     for result in results:
         current_record = {
@@ -115,7 +115,7 @@ def generate_transcript(event, _):
     ]
     model = "gpt-3.5-turbo"
     openai.api_key = os.environ.get('OPENAI_KEY')
-    print("creating openai response")
+    logger.info("creating openai response")
     """"
     response = openai.ChatCompletion.create(
         model=model,
