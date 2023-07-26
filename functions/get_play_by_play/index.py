@@ -74,7 +74,7 @@ def get_play_by_play(game_id, period, page_number=1):
             "statusCode": 404
         }
         return response
-    logger.info({"query_results:", results})
+    logger.info({"query_results": results})
     output = []
     for result in results:        
         current_record = {
