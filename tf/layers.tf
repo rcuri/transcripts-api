@@ -13,8 +13,10 @@ resource "null_resource" "lambda_layer" {
   # the command to install python and dependencies to the machine and zips
   provisioner "local-exec" {
     command = <<EOT
+      apt install zip -y    
       mkdir python
       pip install -r ${local.requirements_path} -t python/
+      zip -r ${local.layer_zip_path} python/
     EOT
   }
 }
