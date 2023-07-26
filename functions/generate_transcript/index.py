@@ -114,7 +114,7 @@ def generate_transcript(event, _):
             "content": prompt_events,
         },
     ]
-    model = "gpt-3.5-turbo"
+    model = "gpt-4"
     openai.api_key = os.environ.get('OPENAI_KEY')
     logger.info("creating openai response")
     response = openai.ChatCompletion.create(
