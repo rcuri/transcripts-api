@@ -30,7 +30,7 @@ data "archive_file" "lambda_layer" {
     "venv",
   ]
   source_dir  = "${path.root}/python"
-  output_path = "${path.root}/../layers/layer.zip"
+  output_path = "${path.root}/../layers/python.zip"
 }
 
 # define existing bucket for storing lambda layers
