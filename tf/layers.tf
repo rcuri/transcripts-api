@@ -26,7 +26,6 @@ data "archive_file" "lambda_layer" {
   type = "zip"
   depends_on = [null_resource.lambda_layer]
   excludes   = [
-    "__pycache__",
     "venv",
   ]
   source_dir  = "${path.root}/python"
