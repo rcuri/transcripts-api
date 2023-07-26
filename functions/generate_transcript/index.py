@@ -117,7 +117,6 @@ def generate_transcript(event, _):
     model = "gpt-3.5-turbo"
     openai.api_key = os.environ.get('OPENAI_KEY')
     logger.info("creating openai response")
-    """"
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
@@ -148,6 +147,7 @@ def generate_transcript(event, _):
             "total_tokens": 1833
         }
     }
+    """
     transcript_response = response_dict['choices'][0]['message']['content']
     transcript_array = transcript_response.split("\n")
 
