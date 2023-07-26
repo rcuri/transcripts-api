@@ -42,7 +42,7 @@ resource "aws_lambda_function" "get_games_lambda_function" {
   source_code_hash = data.archive_file.lambda_get_games.output_base64sha256
   layers = [
     "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV2:40",
-    aws_lambda_layer_version.my-lambda-layer.arn
+    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1"
   ]
   environment {
     variables = {
