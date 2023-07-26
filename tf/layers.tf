@@ -15,6 +15,7 @@ resource "null_resource" "lambda_layer" {
     command = <<EOT
       pwd
       ls
+      rm -rf python
       mkdir python
       pip install -r ${local.requirements_path} -t python/
       ls python
