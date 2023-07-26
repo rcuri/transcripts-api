@@ -8,7 +8,7 @@ locals {
 # create zip file from requirements.txt. Triggers only when the file is updated
 resource "null_resource" "lambda_layer" {
   triggers = {
-    requirements = filesha1(local.requirements_path)
+    always_run = "${timestamp()}"
   }
   # the command to install python and dependencies to the machine and zips
   provisioner "local-exec" {
