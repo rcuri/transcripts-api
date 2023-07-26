@@ -46,6 +46,7 @@ resource "aws_lambda_function" "get_games_lambda_function" {
   ]
   environment {
     variables = {
+      STAGE = "prod"
       POSTGRES_DEV_PASSWORD = local.db_dev_credentials.password
       POSTGRES_DEV_DB = local.db_dev_credentials.db
       POSTGRES_DEV_HOST = local.db_dev_credentials.host
