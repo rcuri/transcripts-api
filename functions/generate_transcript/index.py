@@ -15,9 +15,6 @@ db_config = DatabaseConfig(stage)
 def generate_system_prompt():
     return 'You are part of an elite team that sits courtside at NBA games and watches NBA games live. Your team is responsible for coming up with what the commentators say as they watch the game live. Tonight\'s commentators are Kevin Harlan and Reggie Miller. Your team has watched all of the games that these announcers have commentated on so you\'re very familiar with how they speak and the pace at which they speak.\nAt the end of the night, your team compiles a transcript of everything your team told the commentators to say while watching the game. After the game, the transcript is compared against play-by-play data for the game and your team is graded based on a couple of factors:\n- How relevant the discussion is to the type of play in event_type_value\n- Casual banter between the announcers sometimes\n- Smooth transitions between consecutive in-game events\n- The time it takes for an announcer to speak matches flow of the game\n- Lines spoken must fill total duration of play\n- Discussion should only talk about the end of the period if event_type_value is "END_OF_PERIOD"\n- Discussion should only talk about the start of the period or game if event_type_value is "START_OF_PERIOD"\n\nEach announcer\'s response must be given in the following format:\n[Estimated time to speak line] Announcer Name: Announcer dialogue\n\nThe first response will always start from zero and the next response\'s time will begin after the first announcer has finished speaking, for example:\n[0:00] Kevin Harlan: And we\'re underway here in Boston as the Celtics host the 76ers.\n[0:04] Reggie Miller: That\'s right Kevin.\n\nEach play will be represented as an event that will be structured as shown below. If a field is missing, assume it is NULL:\n\nevent_type: The type of play that occurred.\nperiod: The period of basketball game.\nlive_time: The time this event occurred in PST.\nplayclock_time: The amount of time remaining in the period.\nhome_description: The description of the play and how the home team was involved in the play.\nvisitor_descriptions: The description of the play and how the visiting team was involved in the play.\nneutral_description: The description of events not related to a specific team.\nscore: The score of the game after the event occurred.\nhome_team: Information regarding the home team in this game.\nvisitor_team: Information regarding the visiting team in this game.\nplayer1_name: The primary player involved in the play.\nplayer1_team: The team of player1.\nplayer2_name: The secondary player involved in the play.\nplayer2_team: The team of player2.\nplayer3_name: The tertiary player involved in the play.\nplayer3_team: The team of player3\n\nSince events provided occur in chronological order, dialogue must transition naturally to the next play.\n\nPlease provide a copy of the announcer\'s transcript.\n'
 
-def generate_transcript_result_line(transaction_id, line_number, speaker_begin_time, speaker_name, line):
-    return f"('{transaction_id}', '{line_number}' ,'{speaker_begin_time}', '{speaker_name}', $${line}$$)"
-
 
 def generate_transcript(event, _):
     transcript_input = event['transcript_input']
@@ -95,10 +92,9 @@ def generate_transcript(event, _):
             'player3_team_name': result[14]                                    
         }
         raw_events.append(current_record)
-    events = raw_events
 
     prompt_events = ""
-    for event in events:
+    for event in raw_events:
         for key, val in event.items():
             if val and key not in ["event_msg_type_code", "game_id"]:
                 prompt_events += f"{key}: {val}\n"
@@ -123,7 +119,7 @@ def generate_transcript(event, _):
         temperature=.5
     )
 
-    print("openai response", response)
+    logger.info({"openai_response": response})
     response_dict = response.to_dict_recursive()
     """
     response_dict = {
@@ -151,16 +147,16 @@ def generate_transcript(event, _):
     transcript_response = response_dict['choices'][0]['message']['content']
     transcript_array = transcript_response.split("\n")
 
-    output_array = []
-    for transcript_line in transcript_array:
-        if transcript_line:
-            output_array.append(transcript_line)
-
     transcript_output = []
-    for raw_line in output_array:
+    for raw_line in transcript_array:
+        if not raw_line:
+            continue
         speaker_begin_time_stamp = re.findall(r'(?<=\[).+?(?=\])', raw_line)
         if not speaker_begin_time_stamp:
-            print("timestamp not found. invalid line.")
+            logger.info({
+                "message": "timestamp not found. invalid line.",
+                "line": raw_line    
+            })
             continue        
         speaker_name = "Kevin Harlan" if "Kevin Harlan" in raw_line else "Reggie Miller"
         beginning_index = raw_line.find(speaker_name)
@@ -180,7 +176,6 @@ def generate_transcript(event, _):
             item['speaker_begin_time'], item['line']
         )
         transcript_results_array.append(cur_line)
-    #all_results = ", ".join(transcript_results_array)
     insert_query = """
         INSERT INTO transcript_results (transaction_id, line_number, speaker_name, time_spoken, spoken_line)
         VALUES %s;
