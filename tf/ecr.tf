@@ -1,11 +1,4 @@
-provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
-}
-
 resource "aws_ecrpublic_repository" "drigo_transcripts" {
-  provider = aws.us_east_1
-
   repository_name = "drigo/transcripts"
 
   tags = {
