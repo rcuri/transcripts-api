@@ -41,10 +41,6 @@ resource "aws_lambda_function" "get_games_lambda_function" {
     command = ["handlers.get_games_handler"]
   }
 
-  layers = [
-    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1",
-    "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV2:40",
-  ]
   environment {
     variables = {
       STAGE = "prod"
