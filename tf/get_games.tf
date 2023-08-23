@@ -35,11 +35,12 @@ resource "aws_lambda_function" "get_games_lambda_function" {
   function_name = "transcriptai-dev-getGames"
   memory_size = 512
   timeout = 6
+  image_uri = "public.ecr.aws/e6p9w9x8/drigo/transcripts:latest"
+  package_type = "Image"
+  image_config {
+    command = ["handlers.get_games_handler"]
+  }
 
-  s3_bucket = aws_s3_bucket.serverless_deployment_bucket.id
-  s3_key    = aws_s3_object.lambda_get_games.key
-
-  source_code_hash = data.archive_file.lambda_get_games.output_base64sha256
   layers = [
     "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1",
     "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV2:40",
