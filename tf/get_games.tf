@@ -35,7 +35,7 @@ resource "aws_lambda_function" "get_games_lambda_function" {
   function_name = "transcriptai-dev-getGames"
   memory_size = 512
   timeout = 6
-  image_uri = "public.ecr.aws/e6p9w9x8/drigo/transcripts:latest"
+  image_uri = "571830630900.dkr.ecr.us-east-1.amazonaws.com/drigo/transcripts:latest"
   package_type = "Image"
   image_config {
     command = ["handlers.get_games_handler"]
