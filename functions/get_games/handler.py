@@ -1,4 +1,4 @@
-from index import get_games
+from .index import get_games
 import json
 from aws_lambda_powertools import Logger
 

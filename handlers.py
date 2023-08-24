@@ -1,0 +1,7 @@
+from functions.generate_transcript.handler import handler as generate_transcript_handler
+from functions.get_games.handler import handler as get_games_handler
+from functions.get_play_by_play.handler import handler as get_play_by_play_handler
+from functions.get_transcript_status.handler import handler as get_transcript_status_handler
+from functions.process_sqs_queue.index import process_sqs_queue as process_sqs_queue_handler
+from functions.submit_transcript_request.handler import handler as submit_transcript_request_handler
+from functions.update_generate_transcript_status.index import update_generate_transcript_status as update_generate_transcript_status_handler

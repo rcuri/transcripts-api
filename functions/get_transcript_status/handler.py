@@ -1,4 +1,4 @@
-from index import get_transcript_status
+from .index import get_transcript_status
 import json
 from aws_lambda_powertools import Logger
 

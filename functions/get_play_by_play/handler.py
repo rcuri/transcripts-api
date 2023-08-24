@@ -1,4 +1,4 @@
-from index import get_play_by_play
+from .index import get_play_by_play
 import json
 from aws_lambda_powertools import Logger
 

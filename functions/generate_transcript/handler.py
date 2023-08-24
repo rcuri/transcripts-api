@@ -1,4 +1,4 @@
-from index import generate_transcript
+from .index import generate_transcript
 import json
 
 def handler(event, _):
