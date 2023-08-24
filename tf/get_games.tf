@@ -30,8 +30,6 @@ resource "aws_s3_object" "lambda_get_games" {
 }
 
 resource "aws_lambda_function" "get_games_lambda_function" {
-  handler = "handler.handler"
-  runtime = "python3.8"
   function_name = "transcriptai-dev-getGames"
   memory_size = 512
   timeout = 6
