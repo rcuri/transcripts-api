@@ -30,20 +30,15 @@ resource "aws_s3_object" "lambda_generate_transcript" {
 }
 
 resource "aws_lambda_function" "generate_transcript_lambda_function" {
-  handler = "index.generate_transcript"
-  runtime = "python3.8"
   function_name = "transcriptai-dev-generate_transcript"
   memory_size = 512
   timeout = 120
 
-  s3_bucket = aws_s3_bucket.serverless_deployment_bucket.id
-  s3_key    = aws_s3_object.lambda_generate_transcript.key
-
-  source_code_hash = data.archive_file.lambda_generate_transcript.output_base64sha256
-  layers = [
-    aws_lambda_layer_version.openai_3_8_layer.arn,
-    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1"
-  ]
+  image_uri = "571830630900.dkr.ecr.us-east-1.amazonaws.com/drigo/transcripts:latest"
+  package_type = "Image"
+  image_config {
+    command = ["handlers.generate_transcript_handler"]
+  }
   
   environment {
     variables = {

@@ -1,7 +1,7 @@
 import psycopg2
 import os
 from aws_lambda_powertools import Logger
-from database.config import DatabaseConfig
+from .database.config import DatabaseConfig
 
 
 stage = os.environ.get('STAGE', 'dev')

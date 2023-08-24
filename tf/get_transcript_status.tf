@@ -30,19 +30,15 @@ resource "aws_s3_object" "lambda_get_transcript_status" {
 }
 
 resource "aws_lambda_function" "get_transcript_status_lambda_function" {
-  handler = "handler.handler"
-  runtime = "python3.8"
   function_name = "transcriptai-dev-get_transcript_status"
   memory_size = 512
   timeout = 6
 
-  s3_bucket = aws_s3_bucket.serverless_deployment_bucket.id
-  s3_key    = aws_s3_object.lambda_get_transcript_status.key
-
-  source_code_hash = data.archive_file.lambda_get_transcript_status.output_base64sha256
-  layers = [
-    "arn:aws:lambda:us-east-1:571830630900:layer:psycopg2-layer:1"
-  ]
+  image_uri = "571830630900.dkr.ecr.us-east-1.amazonaws.com/drigo/transcripts:latest"
+  package_type = "Image"
+  image_config {
+    command = ["handlers.get_transcript_status_handler"]
+  }
   environment {
     variables = {
       STAGE = "prod"
