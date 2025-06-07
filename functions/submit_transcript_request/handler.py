@@ -1,4 +1,4 @@
-from index import submit_transcript_request
+from functions.submit_transcript_request.index import submit_transcript_request
 import json
 from aws_lambda_powertools import Logger
 

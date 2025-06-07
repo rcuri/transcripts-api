@@ -1,19 +1,22 @@
-from .index import generate_transcript
+from functions.generate_transcript.index import generate_transcript
 import json
 
 def handler(event, _):
+    print(event)
     try:
-        body = json.loads(event['body'])
-        game_id = body['game_id']        
-        page_number = body.get('page_number', 1)
-        period = body.get('period', 1)
+        transcript_input = event['transcript_input']
+        game_id = transcript_input['game_id']        
+        page_number = transcript_input.get('page_number', 1)
+        period = transcript_input.get('period', 1)        
     except KeyError as e:
-        body = json.dumps({"message": "missing game_id"})
+        print(e)
         return {
             "statusCode": 400,
-            "body": body
+            "body": json.dumps({"message": f"missing {e}"})
         }
-    transcript_results = generate_transcript(game_id, period, page_number)
+    execution_id = event['execution_id'].split(":")
+    transaction_id = execution_id[-1]
+    transcript_results = generate_transcript(game_id, period, page_number, transaction_id)
     if len(transcript_results) == 0:
         response = {
             "data": transcript_results,
