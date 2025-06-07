@@ -1,7 +1,7 @@
 import psycopg2
 import os
 from aws_lambda_powertools import Logger
-from .database.config import DatabaseConfig
+from functions.database.config import DatabaseConfig
 
 
 stage = os.environ.get('STAGE', 'dev')
@@ -82,8 +82,8 @@ def get_play_by_play(game_id, period, page_number=1):
             'event_number': result[1],
             'event_type_value': result[2],
             'period': result[3],
-            'wc_timestring': result[4].strftime('%I:%M'),
-            'pc_timestring': result[5].strftime('%M:%S'),
+            'wc_timestring': result[4],
+            'pc_timestring': result[5],
             'home_description': result[6],
             'neutral_description': result[7],
             'visitor_description': result[8],

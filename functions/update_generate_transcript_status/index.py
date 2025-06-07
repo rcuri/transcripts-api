@@ -1,7 +1,7 @@
 import psycopg2
 import os
 from aws_lambda_powertools import Logger
-from .database.config import DatabaseConfig
+from functions.database.config import DatabaseConfig
 
 
 stage = os.environ.get('STAGE', 'dev')
@@ -11,7 +11,6 @@ db_config = DatabaseConfig(stage)
 
 @logger.inject_lambda_context(log_event=True)
 def update_generate_transcript_status(event, _):
-    print(event)
     transcript_input = event['transcript_input']
     transcript_id = transcript_input['transcript_id']
     connection = psycopg2.connect(
